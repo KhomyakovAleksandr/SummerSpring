@@ -1,36 +1,47 @@
 package org.xomyakov.models;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-
+@Entity
 @Table(name = "team")
-public class Team extends BaseEntity{
+public class Team extends BaseEntity {
 
     private String teamName;
-    private int totalWins;
-    private int totalLosses;
-    private double winRate;
-    private Set<Player> players;
+    private int countWins;
+    private int countLosses;
     private Set<Match> matches;
-
+    private Tournament tournament;
 
     public Team() {
-        this.players = new HashSet<>();
         this.matches = new HashSet<>();
     }
 
-    public Team(String teamName, int totalWins, int totalLosses, double winRate) {
+    public Team(String teamName, int countWins, int countLosses) {
         this();
         this.teamName = teamName;
-        this.totalWins = totalWins;
-        this.totalLosses = totalLosses;
-        this.winRate = winRate;
+        this.countWins = countWins;
+        this.countLosses = countLosses;
     }
 
-//                                                                                       ???????????????????
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "matches", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tournament_id")
+    public Tournament getTournament() {
+        return tournament;
+    }
+
+    public void setTournament(Tournament tournament) {
+        this.tournament = tournament;
+    }
+
+    @ManyToMany
+    @JsonIgnore
+    @JoinTable(
+            name = "team_matches",
+            joinColumns = @JoinColumn(name = "team_id"),
+            inverseJoinColumns = @JoinColumn(name = "match_id")
+    )
     public Set<Match> getMatches() {
         return matches;
     }
@@ -48,42 +59,24 @@ public class Team extends BaseEntity{
         this.teamName = teamName;
     }
 
-    @Column(name = "total_wins", nullable = false)
-    public int getTotalWins() {
-        return totalWins;
+    @Column(name = "count_wins", nullable = false)
+    public int getCountWins() {
+        return countWins;
     }
 
-    public void setTotalWins(int totalWins) {
-        this.totalWins = totalWins;
+    public void setCountWins(int countWins) {
+        this.countWins = countWins;
     }
 
-    @Column(name = "total_losses", nullable = false)
-    public int getTotalLosses() {
-        return totalLosses;
+    @Column(name = "count_losses", nullable = false)
+    public int getCountLosses() {
+        return countLosses;
     }
 
-    public void setTotalLosses(int totalLosses) {
-        this.totalLosses = totalLosses;
-    }
-
-    @Column(name = "win_rate", nullable = false)
-    public double getWinRate() {
-        return winRate;
-    }
-
-    public void setWinRate(double winRate) {
-        this.winRate = winRate;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "players", referencedColumnName = "id", nullable = false)
-    public Set<Player> getPlayers() {
-        return players;
-    }
-
-    public void setPlayers(Set<Player> players) {
-        this.players = players;
+    public void setCountLosses(int countLosses) {
+        this.countLosses = countLosses;
     }
 }
+
 
 // мб добивать ключ/значение для определения какой игрок какого персонажа выбрал

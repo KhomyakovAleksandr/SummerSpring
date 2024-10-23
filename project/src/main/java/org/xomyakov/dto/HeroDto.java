@@ -1,23 +1,20 @@
-package org.xomyakov.models;
-import jakarta.persistence.*;
+package org.xomyakov.dto;
 
-@Entity
-@Table(name = "heroes")
-public class Hero extends BaseEntity{
+public class HeroDto {
+    private Long id;
     private String name;
     private String primaryAttribute;
     private double winRate;
 
-    public Hero() {
+    // Геттеры и сеттеры
+    public Long getId() {
+        return id;
     }
 
-    public Hero(String name, String primaryAttribute, double winRate) {
-        this.name = name;
-        this.primaryAttribute = primaryAttribute;
-        this.winRate = winRate;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -26,7 +23,6 @@ public class Hero extends BaseEntity{
         this.name = name;
     }
 
-    @Column(name = "primary_attribute", nullable = false)
     public String getPrimaryAttribute() {
         return primaryAttribute;
     }
@@ -35,7 +31,6 @@ public class Hero extends BaseEntity{
         this.primaryAttribute = primaryAttribute;
     }
 
-    @Column(name = "win_rate", nullable = false)
     public double getWinRate() {
         return winRate;
     }

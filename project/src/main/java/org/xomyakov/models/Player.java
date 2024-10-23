@@ -1,34 +1,31 @@
 package org.xomyakov.models;
 import jakarta.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "players")
-public class Player extends BaseEntity{
+public class Player extends BaseEntity {
     private String nickname;
     private String realName;
-    private String dateOfBirth;
+    private Date dateOfBirth;
     private Team team;
     private String role;
-    private int totalWins;
-    private int totalLosses;
-    private double winRate;
+    private int countWins;
+    private int countLosses;
 
     public Player() {
     }
 
-    public Player(String nickname, String realName, String dateOfBirth,
-                  Team team, String role, int totalWins, int totalLosses,
-                  double winRate) {
+    public Player(String nickname, String realName, Date dateOfBirth,
+                  Team team, String role, int totalWins, int totalLosses) {
         this.nickname = nickname;
         this.realName = realName;
         this.dateOfBirth = dateOfBirth;
         this.team = team;
         this.role = role;
-        this.totalWins = totalWins;
-        this.totalLosses = totalLosses;
-        this.winRate = winRate;
+        this.countWins = totalWins;
+        this.countLosses = totalLosses;
     }
-
 
     @Column(name = "nickname", nullable = false)
     public String getNickname() {
@@ -48,17 +45,18 @@ public class Player extends BaseEntity{
         this.realName = realName;
     }
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "date_of_birth", nullable = false)
-    public String getDateOfBirth() {
+    public Date getDateOfBirth() {
         return dateOfBirth;
     }
 
-    public void setDateOfBirth(String dateOfBirth) {
+    public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
 
-    @OneToOne
-    @JoinColumn(name = "team", referencedColumnName = "id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "team_id", referencedColumnName = "id", nullable = false)
     public Team getTeam() {
         return team;
     }
@@ -76,30 +74,21 @@ public class Player extends BaseEntity{
         this.role = role;
     }
 
-    @Column(name = "total_wins", nullable = false)
+    @Column(name = "count_wins", nullable = false)
     public int getTotalWins() {
-        return totalWins;
+        return countWins;
     }
 
     public void setTotalWins(int totalWins) {
-        this.totalWins = totalWins;
+        this.countWins = totalWins;
     }
 
-    @Column(name = "total_losses", nullable = false)
+    @Column(name = "count_losses", nullable = false)
     public int getTotalLosses() {
-        return totalLosses;
+        return countLosses;
     }
 
     public void setTotalLosses(int totalLosses) {
-        this.totalLosses = totalLosses;
-    }
-
-    @Column(name = "win_rate", nullable = false)
-    public double getWinRate() {
-        return winRate;
-    }
-
-    public void setWinRate(double winRate) {
-        this.winRate = winRate;
+        this.countLosses = totalLosses;
     }
 }

@@ -1,29 +1,21 @@
-package org.xomyakov.models;
-import jakarta.persistence.*;
-import java.util.HashSet;
+package org.xomyakov.dto;
 import java.util.Set;
 
-@Entity
-@Table(name = "tournament")
-public class Tournament extends BaseEntity{
-
-
+public class TournamentDto{
+    private Long id;
     private String name;
     private double prizePool;
     private String organizer;
 
-    public Tournament() {
+    // Геттеры и сеттеры
+    public Long getId() {
+        return id;
     }
 
-
-
-    public Tournament(String name, double prizePool, String organizer) {
-        this.name = name;
-        this.prizePool = prizePool;
-        this.organizer = organizer;
+    public void setId(Long id) {
+        this.id = id;
     }
 
-        @Column(name = "name", nullable = false)
     public String getName() {
         return name;
     }
@@ -32,7 +24,6 @@ public class Tournament extends BaseEntity{
         this.name = name;
     }
 
-    @Column(name = "price_pool", nullable = false)
     public double getPrizePool() {
         return prizePool;
     }
@@ -41,7 +32,6 @@ public class Tournament extends BaseEntity{
         this.prizePool = prizePool;
     }
 
-    @Column(name = "organizer", nullable = false)
     public String getOrganizer() {
         return organizer;
     }
@@ -50,5 +40,4 @@ public class Tournament extends BaseEntity{
         this.organizer = organizer;
     }
 }
-
 

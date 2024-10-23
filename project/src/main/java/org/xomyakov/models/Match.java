@@ -1,38 +1,24 @@
 package org.xomyakov.models;
 import jakarta.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.Date;
 
 @Entity
 @Table(name = "matches")
-public class Match extends BaseEntity{
+public class Match extends BaseEntity {
 
     private Tournament tournament;
-    private String matchDate;
+    private Date matchDate;
     private String matchTime;
     private Team team1;
     private Team team2;
     private Team winnerTeam;
     private int matchDuration;
-    private String patchVersion;
     private String matchType;
-    private Set<Long> team1PickHeroes;
-    private Set<Long> team2PickHeroes;
-    private Set<Long> team1BanHeroes;
-    private Set<Long> team2BanHeroes;
 
     public Match() {
-        this.team1PickHeroes = new HashSet<>();
-        this.team2PickHeroes = new HashSet<>();
-        this.team1BanHeroes = new HashSet<>();
-        this.team2BanHeroes = new HashSet<>();
     }
 
-
-    public Match(Tournament tournament, String matchDate, String matchTime,
-                 Team team1, Team team2, Team winnerTeam, int matchDuration,
-                 String patchVersion, String matchType) {
-        this();
+    public Match(Tournament tournament, Date matchDate, String matchTime, Team team1, Team team2, Team winnerTeam, int matchDuration, String matchType) {
         this.tournament = tournament;
         this.matchDate = matchDate;
         this.matchTime = matchTime;
@@ -40,13 +26,11 @@ public class Match extends BaseEntity{
         this.team2 = team2;
         this.winnerTeam = winnerTeam;
         this.matchDuration = matchDuration;
-        this.patchVersion = patchVersion;
         this.matchType = matchType;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
-    @JoinColumn(name = "tourname", referencedColumnName = "id", nullable = false)
-    @Column(name = "tourname", nullable = false)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "tournament_id", referencedColumnName = "id", nullable = false)
     public Tournament getTournament() {
         return tournament;
     }
@@ -55,12 +39,13 @@ public class Match extends BaseEntity{
         this.tournament = tournament;
     }
 
+    @Temporal(TemporalType.DATE)
     @Column(name = "match_date", nullable = false)
-    public String getMatchDate() {
+    public Date getMatchDate() {
         return matchDate;
     }
 
-    public void setMatchDate(String matchDate) {
+    public void setMatchDate(Date matchDate) {
         this.matchDate = matchDate;
     }
 
@@ -73,7 +58,7 @@ public class Match extends BaseEntity{
         this.matchTime = matchTime;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_1", referencedColumnName = "id", nullable = false)
     public Team getTeam1() {
         return team1;
@@ -83,7 +68,7 @@ public class Match extends BaseEntity{
         this.team1 = team1;
     }
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "team_2", referencedColumnName = "id", nullable = false)
     public Team getTeam2() {
         return team2;
@@ -93,7 +78,9 @@ public class Match extends BaseEntity{
         this.team2 = team2;
     }
 
-    @Column(name = "winner_team", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)
+//    @JsonIgnore
+    @JoinColumn(name = "winner_team", referencedColumnName = "id", nullable = true) // Изменено на nullable = true
     public Team getWinnerTeam() {
         return winnerTeam;
     }
@@ -111,15 +98,6 @@ public class Match extends BaseEntity{
         this.matchDuration = matchDuration;
     }
 
-    @Column(name = "patch_version", nullable = false)
-    public String getPatchVersion() {
-        return patchVersion;
-    }
-
-    public void setPatchVersion(String patchVersion) {
-        this.patchVersion = patchVersion;
-    }
-
     @Column(name = "match_type", nullable = false)
     public String getMatchType() {
         return matchType;
@@ -127,44 +105,5 @@ public class Match extends BaseEntity{
 
     public void setMatchType(String matchType) {
         this.matchType = matchType;
-    }
-
-    @OneToMany
-    @JoinColumn(name = "team_1_pick_hero", referencedColumnName = "id", nullable = false)
-    public Set<Long> getTeam1PickHeroes() {
-        return team1PickHeroes;
-    }
-
-    public void setTeam1PickHeroes(Set<Long> team1PickHeroes) {
-        this.team1PickHeroes = team1PickHeroes;
-    }
-
-    @OneToMany
-    @JoinColumn(name = "team_2_pick_hero", referencedColumnName = "id", nullable = false)
-    public Set<Long> getTeam2PickHeroes() {
-        return team2PickHeroes;
-    }
-
-    public void setTeam2PickHeroes(Set<Long> team2PickHeroes) {
-        this.team2PickHeroes = team2PickHeroes;
-    }
-    @OneToMany
-    @JoinColumn(name = "team_1_ban_hero", referencedColumnName = "id", nullable = false)
-    public Set<Long> getTeam1BanHeroes() {
-        return team1BanHeroes;
-    }
-
-    public void setTeam1BanHeroes(Set<Long> team1BanHeroes) {
-        this.team1BanHeroes = team1BanHeroes;
-    }
-
-    @OneToMany
-    @JoinColumn(name = "team_2_ban_hero", referencedColumnName = "id", nullable = false)
-    public Set<Long> getTeam2BanHeroes() {
-        return team2BanHeroes;
-    }
-
-    public void setTeam2BanHeroes(Set<Long> team2BanHeroes) {
-        this.team2BanHeroes = team2BanHeroes;
     }
 }
